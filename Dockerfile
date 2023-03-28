@@ -1,7 +1,3 @@
-# Build: sudo docker build -t <project_name> .
-# Run: sudo docker run -v $(pwd):/workspace/project --gpus all -it --rm <project_name>
-
-
 FROM python:3.10-slim-buster
 
 
@@ -29,16 +25,13 @@ RUN bash miniconda3.sh -b -p /conda \
 ENV PATH="/conda/bin:${PATH}"
 RUN conda create -n ${CONDA_ENV_NAME} python=${PYTHON_VERSION}
 
-
 # Switch to zsh shell
-SHELL ["/bin/zsh", "-c"]
-
+SHELL ["/bin/bash", "-c"]
 
 # Install requirements
 COPY pyproject.toml ./
-COPY app.py ./app.py
+COPY ./app.py ./app.py
 RUN source activate ${CONDA_ENV_NAME} \
     && pip install poetry \
     && poetry install
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--ckpt_dir", "/models/${MODELS}", "--tokenizer_path", "/models/tokenizer.model"]
+CMD source activate ${CONDA_ENV_NAME} && python app.py --ckpt_dir /workspace/project/pyllama_data/${MODELS} --tokenizer_path /workspace/project/pyllama_data/tokenizer.model
