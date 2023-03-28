@@ -34,4 +34,4 @@ COPY ./app.py ./app.py
 RUN source activate ${CONDA_ENV_NAME} \
     && pip install poetry \
     && poetry install
-CMD source activate ${CONDA_ENV_NAME} && python app.py --ckpt_dir /workspace/project/pyllama_data/${MODELS} --tokenizer_path /workspace/project/pyllama_data/tokenizer.model
+CMD source activate ${CONDA_ENV_NAME} && python app.py --ckpt_dir /workspace/project/pyllama_data/${MODELS} --tokenizer_path /workspace/project/pyllama_data/tokenizer.model --max_seq_len ${MAX_SEQ_LEN}
