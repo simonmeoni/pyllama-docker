@@ -3,7 +3,7 @@ FROM python:3.10-slim-buster
 
 ENV CONDA_ENV_NAME=myenv
 ENV PYTHON_VERSION=3.10
-ENV GPU=single
+ENV PYLLAMA_META_MP=1
 
 # Basic setup
 RUN apt update
@@ -35,4 +35,5 @@ COPY multi.py ./multi.py
 RUN source activate ${CONDA_ENV_NAME} \
     && pip install poetry \
     && poetry install
-CMD source activate ${CONDA_ENV_NAME} && python ${GPU}.py --ckpt_dir /workspace/project/pyllama_data/${MODELS} --tokenizer_path /workspace/project/pyllama_data/tokenizer.model --max_seq_len ${MAX_SEQ_LEN}
+CMD source activate ${CONDA_ENV_NAME} && python single.py --ckpt_dir /workspace/project/pyllama_data/7B --tokenizer_path /workspace/project/pyllama_data/tokenizer.model --max_seq_len ${MAX_SEQ_LEN}
+#CMD source activate ${CONDA_ENV_NAME} &&  --ckpt_dir /workspace/project/pyllama_data/13B --tokenizer_path /workspace/project/pyllama_data/tokenizer.model --max_seq_len ${MAX_SEQ_LEN}
